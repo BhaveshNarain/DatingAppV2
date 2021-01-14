@@ -22,7 +22,7 @@ namespace API.Helpers
 
             user.LastActive = DateTime.Now;
 
-            await repo.SaveAllAsync();
+            var saveResult = await repo.SaveAllAsync();
         }
     }
 }

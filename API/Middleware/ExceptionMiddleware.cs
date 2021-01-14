@@ -31,6 +31,7 @@ namespace API.Middleware
             {
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";
+                var currentCode = context.Response.StatusCode; 
                 context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
 
                 var response = _env.IsDevelopment()
