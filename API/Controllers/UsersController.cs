@@ -27,15 +27,14 @@ namespace DatingApp.API.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "Member")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery] UserParams userParams)
         {
-            var user = await _unitOfWork.userRepository.GetUserByUsernameAsync(User.GetUsername());
-            userParams.CurrentUsername = user.UserName;
+            var gender = await _unitOfWork.userRepository.GetUserGender(User.GetUsername());
+            userParams.CurrentUsername = User.GetUsername();
 
             if (string.IsNullOrEmpty(userParams.Gender))
-                userParams.Gender = user.Gender == "male" ? "female" : "male";
+                userParams.Gender = gender == "male" ? "female" : "male";
 
             var users = await _unitOfWork.userRepository.GetMembersAsync(userParams);
 
@@ -44,7 +43,6 @@ namespace DatingApp.API.Controllers
             return Ok(users);
         }
 
-        [Authorize(Roles = "Member")]
         [HttpGet("{username}", Name = "GetUser")]
         public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
