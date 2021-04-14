@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
       knownAs: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       city: ['', Validators.required],
-      country: ['', Validators.required],
+      country: ['' ,Validators.required],
       password: ['', [Validators.required, Validators.minLength(4), 
               Validators.maxLength(8)]],
       confirmPassword: ['',[Validators.required, this.matchValues('password')]]
@@ -39,15 +39,19 @@ export class RegisterComponent implements OnInit {
   }
 
   matchValues(matchTo: string): ValidatorFn  {
+    console.log('Calling matchValues');
     return (control: AbstractControl) => {
+      console.log(control?.value + ' compared to ' + control?.parent?.controls[matchTo].value);
       return control?.value === control?.parent?.controls[matchTo].value 
         ? null : {isMatching: true}
     }
   }
 
   register() {
+    console.log(this.registerForm.value);
     this.accountService.register(this.registerForm.value).subscribe(response => {
       this.router.navigateByUrl('/members');
+      console.log('calling register');
     }, error => {
       this.validationErrors = error;
     });
